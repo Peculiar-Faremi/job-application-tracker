@@ -17,7 +17,7 @@ def clear_user_cache(current_user: models.User = Depends(get_current_user)):
     for key in r.scan_iter(f"applications:user:{current_user.id}:*"): #Find all keys that start with this string
         r.unlink(key) # then delete this at the background
 
-@router.post("/create", response_model= ApplicationResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/create", response_model= ApplicationResponse, status_code=status.HTTP_201_CREATED, dependencies=[Depends(clear_user_cache)])
 def create_application(new_app: ApplicationCreate, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):   
     return application_service.create_application(db, new_app, current_user.id,)
 
@@ -63,7 +63,7 @@ def update_status_application(application_id:int,
                               ):
     return application_service.update_application(db=db, user_id=current_user.id, application_id=application_id, new_status=new_status.status)
 
-@router.delete("/{application_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{application_id}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[Depends(clear_user_cache)])
 def delete_application(
     application_id: int,
     db: Session = Depends(get_db),

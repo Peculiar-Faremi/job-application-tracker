@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Job Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1f1147;--violet:#6d28d9;--vh:#5b21b6;--bg:#f5f3fb;--line:#e2dcf1;--text:#1c1433;--mute:#675f82}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:var(--text);background:var(--bg)}
+[hidden]{display:none!important}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+h1{font-size:clamp(1.9rem,4.5vw,2.7rem);line-height:1.08;margin:0 0 12px;font-weight:800;letter-spacing:-.025em}
+p{margin:0;color:var(--mute);line-height:1.55}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px}
+.btn{border:0;border-radius:8px;padding:10px 16px;font-weight:700;cursor:pointer;background:var(--violet);color:#fff}
+.btn:hover{background:var(--vh)}.btn:disabled{opacity:.6;cursor:wait}
+.alt{background:#ece8f7;color:#3b2a78}.alt:hover{background:#e0d9f2}
+input,select{width:100%;padding:10px 12px;border-radius:8px;border:1px solid #d6cee9;background:#fff;color:var(--text)}
+input::placeholder{color:#9a92b5}
+label{display:block;font-size:.85rem;color:var(--mute);margin:12px 0 5px;font-weight:500}
+#auth{display:grid;grid-template-columns:1fr 1fr;min-height:100vh}
+.side{background:var(--ink);color:#fff;padding:48px;display:flex;flex-direction:column;justify-content:space-between;gap:40px}
+.side p{color:#cfc4f3;max-width:34ch}.side .fine{font-size:.85rem}
+.logo{font-weight:800;font-size:1.15rem}
+.formside{display:grid;place-items:center;padding:28px}
+.box{width:100%;max-width:380px}
+.tabs{display:flex;border-bottom:1px solid var(--line);margin-bottom:6px}
+.tabs button{flex:1;border:0;background:none;padding:12px;cursor:pointer;color:var(--mute);font-weight:700;border-bottom:3px solid transparent;margin-bottom:-1px}
+.tabs button.on{color:var(--violet);border-bottom-color:var(--violet)}
+.err{color:#be123c;font-size:.88rem;min-height:1.2em;margin:10px 0 0}
+.note{font-size:.8rem;margin-top:16px}
+.top{background:var(--ink);color:#fff}
+.top .in{max-width:980px;margin:0 auto;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.top .btn:not(.alt){background:#fff;color:var(--ink)}.top .btn:not(.alt):hover{background:#ece8f7}
+.top .alt{background:#35227a;color:#fff}.top .alt:hover{background:#42298f}
+.wrap{max-width:980px;margin:0 auto;padding:24px 18px 60px}
+.pipe{display:grid;grid-template-columns:repeat(6,1fr);background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:16px}
+.pipe button{cursor:pointer;text-align:left;padding:14px 16px;background:none;border:0;border-right:1px solid var(--line);border-top:4px solid var(--c)}
+.pipe button:last-child{border-right:0}
+.pipe button.on{background:var(--ink);color:#fff}
+.pipe b{display:block;font-size:1.7rem;line-height:1}
+.pipe span{font-size:.8rem;color:var(--mute)}.pipe .on span{color:#cfc4f3}
+.bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.bar input{flex:1 1 200px}
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:14px}
+.app{padding:18px;display:flex;flex-direction:column;gap:12px}
+.app h3{margin:0;font-size:1.08rem}
+.app .co{color:var(--violet);font-weight:700;font-size:.92rem;margin-top:2px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto}
+.row small{color:var(--mute)}
+.st{width:auto;padding:6px 10px;font-weight:700;font-size:.85rem;color:var(--c);border-color:color-mix(in srgb,var(--c) 35%,white);background:color-mix(in srgb,var(--c) 10%,white)}
+.del{background:none;border:0;color:var(--mute);cursor:pointer;padding:6px 8px;border-radius:6px}
+.del:hover{color:#be123c;background:#ffe4e6}
+.empty{grid-column:1/-1;text-align:center;padding:46px 18px}
+.empty h3{margin:0 0 6px}
+.sk{height:120px;border-radius:10px;background:#e9e4f5;animation:pu 1.2s infinite}
+@keyframes pu{50%{opacity:.5}}
+.pager{display:flex;justify-content:center;align-items:center;gap:14px;margin-top:22px;color:var(--mute)}
+dialog{border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--text);padding:24px;width:min(440px,92vw)}
+dialog::backdrop{background:rgba(31,17,71,.55)}
+dialog[open]{animation:pop .2s ease-out}
+@keyframes pop{from{transform:scale(.97);opacity:0}}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.acts{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 18px;border-radius:8px;font-weight:700;transition:opacity .25s;opacity:0;pointer-events:none;max-width:92vw;text-align:center}
+#toast.on{opacity:1}
+@media(max-width:800px){#auth{grid-template-columns:1fr}.side{padding:28px}}
+@media(max-width:700px){.pipe{grid-template-columns:repeat(3,1fr)}.pipe button{border-bottom:1px solid var(--line)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<section id="auth">
+  <div class="side">
+    <span class="logo">Job Tracker</span>
+    <div>
+      <h1>Know where every application stands.</h1>
+      <p>Log what you applied for, move it along as things happen, and stop keeping it all in your head.</p>
+    </div>
+    <p class="fine">Built by Peculiar Faremi</p>
+  </div>
+  <div class="formside"><div class="box">
+    <div class="tabs"><button id="tl" class="on" type="button">Log in</button><button id="tr" type="button">Create account</button></div>
+    <form id="af">
+      <label for="em">Email</label><input id="em" type="email" required autocomplete="email">
+      <label for="pw">Password</label><input id="pw" type="password" required minlength="6" maxlength="12" autocomplete="current-password" placeholder="6 to 12 characters">
+      <p class="err" id="ae" role="alert"></p>
+      <button class="btn" id="ab" style="width:100%;margin-top:6px">Log in</button>
+    </form>
+    <p class="note">This is a demo. Please don’t enter anything sensitive, and use a throwaway password.</p>
+  </div></div>
+</section>
+
+<main id="app" hidden>
+  <header class="top"><div class="in">
+    <b>Job Tracker</b>
+    <div style="display:flex;gap:10px"><button class="btn" id="add">Add application</button><button class="btn alt" id="out">Log out</button></div>
+  </div></header>
+  <div class="wrap">
+    <div class="pipe" id="pipe"></div>
+    <div class="bar">
+      <input id="q" type="search" placeholder="Search your applications" aria-label="Search">
+      <input id="co" type="search" placeholder="Show one company only" aria-label="Filter by company">
+    </div>
+    <div class="list" id="list"></div>
+    <div class="pager" id="pager" hidden>
+      <button class="btn alt" id="pv">Previous</button><span id="pg"></span><button class="btn alt" id="nx">Next</button>
+    </div>
+  </div>
+</main>
+
+<dialog id="dlg">
+  <form id="nf" method="dialog">
+    <h2 style="margin:0 0 4px">Add application</h2>
+    <p>Only the job title and company are required.</p>
+    <label for="jt">Job title</label><input id="jt" required>
+    <label for="cn">Company</label><input id="cn" required>
+    <label for="jl">Job link</label><input id="jl" type="url" placeholder="https://">
+    <div class="two">
+      <div><label for="sr">Where you found it</label><select id="sr"><option value="">Not sure</option></select></div>
+      <div><label for="ns">Status</label><select id="ns"></select></div>
+    </div>
+    <div id="cw" hidden><label for="cs">Which source?</label><input id="cs"></div>
+    <p class="err" id="ne" role="alert"></p>
+    <div class="acts"><button class="btn alt" type="button" id="cx">Cancel</button><button class="btn" id="sv">Save application</button></div>
+  </form>
+</dialog>
+<div id="toast" role="status"></div>
+
+<script>
+// Your live API. Change this if the backend moves.
+const API="https://job-application-tracker-6y8v.onrender.com";
+const STATUSES=["Applied","Interviewing","Offer","Rejected","Ghosted"];
+const SOURCES=["LinkedIn","Indeed","Company Website","Referral","Other"];
+const COLORS={Applied:"#6d28d9",Interviewing:"#b45309",Offer:"#047857",Rejected:"#be123c",Ghosted:"#4b5563"};
+const LIM=10;
+const $=s=>document.querySelector(s);
+let tok=readTok(),items=[],skip=0,more=false,chip="All",mode="login",timer;
+
+function readTok(){try{return JSON.parse(localStorage.getItem("jt")||"null")}catch(e){return null}}
+function saveTok(t){try{t?localStorage.setItem("jt",JSON.stringify(t)):localStorage.removeItem("jt")}catch(e){}tok=t}
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const title=s=>s.toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("on"),3200)}
+function msg(d,s){
+  if(d&&typeof d.detail==="string")return d.detail;
+  if(d&&Array.isArray(d.detail))return d.detail.map(x=>x.msg.replace("Value error, ","")).join(". ");
+  return s===429?"Too many requests. Wait a moment and try again.":"Something went wrong ("+s+").";
+}
+const nice=e=>e instanceof TypeError?"Can’t reach the server. It may be waking up, so try again in a minute.":e.message;
+
+async function api(path,o={},retry=true){
+  const slow=setTimeout(()=>toast("Waking the server up, one moment…"),4000);
+  try{
+    const h=Object.assign({},o.headers||{});
+    if(tok&&!o.open)h.Authorization="Bearer "+tok.access_token;
+    let body=o.body;
+    if(o.json){h["Content-Type"]="application/json";body=JSON.stringify(o.json)}
+    const r=await fetch(API+path,{method:o.method||"GET",headers:h,body});
+    if(r.status===401&&retry&&tok&&!o.open){
+      const rr=await fetch(API+"/refresh",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({refresh_token:tok.refresh_token})});
+      if(rr.ok){saveTok(await rr.json());return api(path,o,false)}
+      logout();throw new Error("Your session ended. Please log in again.");
+    }
+    if(r.status===204)return null;
+    const d=await r.json().catch(()=>null);
+    if(!r.ok)throw new Error(msg(d,r.status));
+    return d;
+  }finally{clearTimeout(slow)}
+}
+
+/* ---------- auth ---------- */
+function setMode(m){
+  mode=m;$("#tl").classList.toggle("on",m==="login");$("#tr").classList.toggle("on",m==="register");
+  $("#ab").textContent=m==="login"?"Log in":"Create account";$("#ae").textContent="";
+  $("#pw").autocomplete=m==="login"?"current-password":"new-password";
+}
+$("#tl").onclick=()=>setMode("login");$("#tr").onclick=()=>setMode("register");
+$("#af").onsubmit=async ev=>{
+  ev.preventDefault();const b=$("#ab"),email=$("#em").value.trim(),pw=$("#pw").value;
+  b.disabled=true;$("#ae").textContent="";
+  try{
+    if(mode==="register")await api("/user/",{method:"POST",json:{email,password:pw},open:true});
+    const t=await api("/login",{method:"POST",open:true,headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams({username:email,password:pw})});
+    saveTok(t);enter();
+  }catch(e){$("#ae").textContent=nice(e)}
+  b.disabled=false;
+};
+function enter(){$("#auth").hidden=true;$("#app").hidden=false;skip=0;chip="All";fetchList()}
+function logout(){saveTok(null);items=[];$("#app").hidden=true;$("#auth").hidden=false;$("#pw").value=""}
+$("#out").onclick=logout;
+
+/* ---------- list ---------- */
+async function fetchList(){
+  const co=$("#co").value.trim(),q=$("#q").value.trim();
+  $("#list").innerHTML='<div class="sk"></div><div class="sk"></div><div class="sk"></div>';
+  try{
+    if(co){items=await api("/applications/company?company_name="+encodeURIComponent(title(co)));more=false}
+    else{items=await api(`/applications/getall?skip=${skip}&limit=${LIM}`+(q?"&search="+encodeURIComponent(q):""));more=items.length===LIM}
+  }catch(e){items=[];more=false;toast(nice(e))}
+  render();
+}
+function render(){
+  const counts={All:items.length};STATUSES.forEach(s=>counts[s]=items.filter(i=>i.status===s).length);
+  $("#pipe").innerHTML=["All",...STATUSES].map(s=>`<button type="button" data-s="${s}" class="${chip===s?"on":""}" style="--c:${COLORS[s]||"#1f1147"}"><b>${counts[s]}</b><span>${s}</span></button>`).join("");
+  const shown=chip==="All"?items:items.filter(i=>i.status===chip);
+  $("#list").innerHTML=shown.length?shown.map(card).join(""):`<div class="empty card"><h3>${items.length?"Nothing in "+esc(chip)+" yet":"No applications here yet"}</h3><p>${items.length?"Move an application to this stage and it shows up here.":"Add your first one and it will appear here."}</p></div>`;
+  const co=$("#co").value.trim();
+  $("#pager").hidden=!!co||(skip===0&&!more);
+  $("#pg").textContent="Page "+(skip/LIM+1);$("#pv").disabled=skip===0;$("#nx").disabled=!more;
+}
+function card(a){
+  const d=new Date(a.created_at).toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"});
+  return `<article class="app card"><div><h3>${esc(a.job_title)}</h3><div class="co">${esc(a.company)}</div></div>
+  <div class="row"><select class="st" data-id="${a.id}" aria-label="Status for ${esc(a.job_title)}" style="--c:${COLORS[a.status]}">${STATUSES.map(s=>`<option ${s===a.status?"selected":""}>${s}</option>`).join("")}</select>
+  <small>Added ${d}</small><button class="del" data-id="${a.id}" aria-label="Delete ${esc(a.job_title)}" title="Delete">Delete</button></div></article>`;
+}
+$("#pipe").onclick=e=>{const b=e.target.closest("button");if(b){chip=b.dataset.s;render()}};
+$("#list").onchange=async e=>{
+  const sel=e.target.closest(".st");if(!sel)return;
+  const a=items.find(i=>i.id==sel.dataset.id),old=a.status;
+  try{await api(`/applications/${a.id}/status`,{method:"PATCH",json:{status:sel.value}});a.status=sel.value;toast("Moved to "+sel.value)}
+  catch(err){toast(nice(err))}
+  render();
+};
+$("#list").onclick=async e=>{
+  const b=e.target.closest(".del");if(!b)return;
+  const a=items.find(i=>i.id==b.dataset.id);
+  if(!confirm(`Delete “${a.job_title}” at ${a.company}?`))return;
+  try{await api("/applications/"+a.id,{method:"DELETE"});items=items.filter(i=>i!==a);render();toast("Application deleted")}
+  catch(err){toast(nice(err))}
+};
+function again(){clearTimeout(timer);timer=setTimeout(()=>{skip=0;fetchList()},350)}
+$("#q").oninput=again;$("#co").oninput=again;
+$("#pv").onclick=()=>{skip=Math.max(0,skip-LIM);fetchList()};
+$("#nx").onclick=()=>{skip+=LIM;fetchList()};
+
+/* ---------- add ---------- */
+$("#ns").innerHTML=STATUSES.map(s=>`<option>${s}</option>`).join("");
+$("#sr").insertAdjacentHTML("beforeend",SOURCES.map(s=>`<option>${s}</option>`).join(""));
+$("#sr").onchange=()=>{$("#cw").hidden=$("#sr").value!=="Other"};
+$("#add").onclick=()=>{$("#nf").reset();$("#cw").hidden=true;$("#ne").textContent="";$("#dlg").showModal()};
+$("#cx").onclick=()=>$("#dlg").close();
+$("#nf").onsubmit=async ev=>{
+  ev.preventDefault();const b=$("#sv");b.disabled=true;$("#ne").textContent="";
+  const body={job_title:$("#jt").value.trim(),company:$("#cn").value.trim(),status:$("#ns").value};
+  if($("#jl").value.trim())body.job_link=$("#jl").value.trim();
+  if($("#sr").value){body.source=$("#sr").value;if(body.source==="Other"&&$("#cs").value.trim())body.custom_source=$("#cs").value.trim()}
+  try{
+    const a=await api("/applications/create",{method:"POST",json:body});
+    items.unshift(a);chip="All";render();$("#dlg").close();toast("Application saved");
+  }catch(e){$("#ne").textContent=nice(e)}
+  b.disabled=false;
+};
+
+if(tok)enter();
+</script>
+</body>
+</html>

@@ -15,9 +15,9 @@ What	                                           Link
 Live API       	                     https://job-application-tracker-6y8v.onrender.com
 Interactive docs (Swagger)	         https://job-application-tracker-6y8v.onrender.com/docs
 Health check	                     https://job-application-tracker-6y8v.onrender.com/health
-Frontend	                         Coming soon
+Frontend                             https://scintillating-bavarois-6721d2.netlify.app                          
 
-The easiest way to play with it right now is the Swagger page above. Register a user, log in, press Authorize at the top right, and then you can create and edit applications straight from the browser.
+The easiest way to play with it right now is the frontend app above. Register a user, log in, press Authorize at the top right, and then you can create and edit applications straight from the browser.
 
 The server sleeps when nobody is using it. I have a monitor pinging it to keep it awake, but if your first request is slow, give it a minute.
 
