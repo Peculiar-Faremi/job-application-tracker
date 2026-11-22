@@ -14,8 +14,8 @@ TRY IT
 What	                                           Link
 Live API       	                     https://job-application-tracker-6y8v.onrender.com
 Interactive docs (Swagger)	         https://job-application-tracker-6y8v.onrender.com/docs
-Health check	                     https://job-application-tracker-6y8v.onrender.com/health
-Frontend                             https://scintillating-bavarois-6721d2.netlify.app                          
+Health check	                       https://job-application-tracker-6y8v.onrender.com/health
+Frontend                             https://job-apply-tracking.netlify.app/                         
 
 The easiest way to play with it right now is the frontend app above. Register a user, log in, press Authorize at the top right, and then you can create and edit applications straight from the browser.
 
@@ -88,10 +88,9 @@ TEST_DATABASE_URL	A separate database used only by the tests
 TEST_REDIS_URL	A separate Redis database used only by the tests
 
 Never commit your real .env. It's in .gitignore for a reason.
-
-Tests
-bash
-pytest
+- Tests
+- bash
+- pytest
 
 The tests wipe their database and flush Redis before each run, so TEST_DATABASE_URL and TEST_REDIS_URL must point at throwaway ones, never your real data.
 
