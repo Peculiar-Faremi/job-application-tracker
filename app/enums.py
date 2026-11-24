@@ -1,7 +1,7 @@
 from enum import Enum
-from sqlalchemy import Column, Integer, String, Enum, ForeignKey, TIMESTAMP, text
+from sqlalchemy import text
 
-# Enums are dropdown menus sqlalchemy also supoorts
+# Enums are dropdown menus sqlalchemy also supports
 class ApplicationStatus(str, Enum):
     APPLIED = "Applied"
     INTERVIEWING = "Interviewing"

@@ -1,7 +1,7 @@
 from app.database import Base
-from sqlalchemy import TIMESTAMP, func, Column, Integer, String, text, ForeignKey
+from sqlalchemy import TIMESTAMP, func, Column, Enum, Integer, String, text, ForeignKey
 from sqlalchemy.orm import relationship
-from app.enums import Enum, ApplicationSource, ApplicationStatus
+from app.enums import ApplicationSource, ApplicationStatus
 
 
 class Applications(Base):
