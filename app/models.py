@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 from app.enums import ApplicationSource, ApplicationStatus
 
 
-class Applications(Base):
+class Application(Base):
     __tablename__ = "applications"
     user_id= Column (Integer, ForeignKey("users.id", ondelete= "CASCADE"), nullable=False)  
     id = Column(Integer, primary_key=True, nullable=False)
