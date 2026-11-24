@@ -5,7 +5,7 @@ from app.enums import Enum, ApplicationSource, ApplicationStatus
 
 
 class Applications(Base):
-    __tablename__ = "Applications"
+    __tablename__ = "applications"
     user_id= Column (Integer, ForeignKey("users.id", ondelete= "CASCADE"), nullable=False)  
     id = Column(Integer, primary_key=True, nullable=False)
     job_title = Column(String, nullable=False, unique=False)
@@ -27,5 +27,5 @@ class User(Base):
     password = Column(String, nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
 
-    applications = relationship("Applications", back_populates="owner")
+    applications = relationship("applications", back_populates="owner")
     
