@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 from app.main import app
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, declarative_base
 import pytest
 from app.config import settings
@@ -13,6 +13,10 @@ SQLALCHEMY_DATABASE_URL = settings.TEST_DATABASE_URL
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine, expire_on_commit=False)
 
+with engine.begin() as conn:
+    conn.execute(text("DROP SCHEMA public CASCADE"))
+    conn.execute(text("CREATE SCHEMA public"))
+    
 @pytest.fixture(autouse=True)  # autouse means it runs before EVERY test automatically
 def clear_redis():
     r.flushdb()  # empty Redis so one test's cache can't affect the next
